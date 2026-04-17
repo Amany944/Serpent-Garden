@@ -1,0 +1,13 @@
+{
+  "name": "serpent-garden",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Snake game with HTML, Tailwind CSS, JavaScript and PHP backend.",
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.css",
+    "watch:css": "tailwindcss -i ./assets/css/tailwind-input.css -o ./assets/css/tailwind.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}

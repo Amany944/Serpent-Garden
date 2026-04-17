@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS game_stats (
+  id INTEGER PRIMARY KEY CHECK (id = 1),
+  last_score INTEGER NOT NULL DEFAULT 0,
+  previous_score INTEGER NOT NULL DEFAULT 0,
+  best_score INTEGER NOT NULL DEFAULT 0,
+  updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS game_scores (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  score INTEGER NOT NULL,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT OR IGNORE INTO game_stats (id, last_score, previous_score, best_score)
+VALUES (1, 0, 0, 0);

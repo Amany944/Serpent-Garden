@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Serpent Garden | Jeu</title>
+  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page-shell page-shell--game h-screen overflow-x-hidden grid grid-rows-[auto,1fr]">
+  <header class="game-topbar flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-3">
+    <a class="back-link w-full sm:w-auto justify-center" href="index.html">Retour accueil</a>
+    <div class="status-pill w-full sm:w-auto justify-between sm:justify-start"><span>Score</span><strong id="scoreLive">0</strong></div>
+    <div class="status-pill w-full sm:w-auto justify-between sm:justify-start"><span>Meilleur</span><strong id="bestLive">0</strong></div>
+    <div class="status-pill w-full sm:w-auto justify-between sm:justify-start"><span>Ancien</span><strong id="previousLive">0</strong></div>
+  </header>
+
+  <main class="game-layout h-full min-h-0 gap-4 md:gap-5">
+    <section class="board-shell w-full">
+      <div class="board-frame">
+        <canvas id="snakeCanvas" width="640" height="640" aria-label="Zone de jeu"></canvas>
+      </div>
+      <div class="game-message text-sm sm:text-base" id="gameMessage">Clique sur <strong>Rejouer</strong> ou <strong>Nouveau jeux</strong> pour lancer la partie.</div>
+    </section>
+
+    <aside class="control-stack w-full max-w-[260px] sm:max-w-none mx-auto sm:mx-0" aria-label="Controle du serpent">
+      <button class="direction-button direction-button--up w-full" data-direction="up" type="button">&uarr;</button>
+      <div class="direction-row w-full">
+        <button class="direction-button" data-direction="left" type="button">&larr;</button>
+        <button class="direction-button" data-direction="down" type="button">&darr;</button>
+        <button class="direction-button" data-direction="right" type="button">&rarr;</button>
+      </div>
+      <button class="menu-button menu-button--primary w-full" id="restartButton" type="button">Nouveau jeux</button>
+    </aside>
+  </main>
+
+  <section class="score-overlay" id="gameOverOverlay" hidden data-visible="false">
+    <div class="score-panel score-panel--gameover w-full max-w-[760px]" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+      <p class="score-kicker">Partie terminee</p>
+      <h2 id="gameOverTitle">Partie terminee, cher gameur.</h2>
+      <p class="score-note" id="gameOverReason">Ton serpent a touche un bord ou s'est croise avec lui-meme.</p>
+      <div class="score-meta score-meta--wide">
+        <div>
+          <span>Nouveau score</span>
+          <strong id="finalScore">0</strong>
+        </div>
+        <div>
+          <span>Ancien score</span>
+          <strong id="finalPrevious">0</strong>
+        </div>
+        <div>
+          <span>Meilleur score</span>
+          <strong id="finalBest">0</strong>
+        </div>
+      </div>
+      <p class="score-note score-note--highlight" id="bestMessage"></p>
+      <div class="score-actions flex flex-col sm:flex-row gap-3">
+        <button class="menu-button menu-button--primary w-full" id="playAgainButton" type="button">Rejouer</button>
+        <a class="menu-button w-full text-center" href="index.html">Accueil</a>
+      </div>
+    </div>
+  </section>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/game.js"></script>
+</body>
+</html>

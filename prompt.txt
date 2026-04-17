@@ -1,0 +1,27 @@
+salut, j'espere que tu vas bien, j'aimerait que tu mme creer un jeu de serpent vert avec une tete rouge qui et de petits points designant ses deux yeux et sa bouche mais avecjavasript 
+
+la surface de jeux est 20 fois plus grande que le serpent au debut du jeux et reste ainsi jusqu'a la fonction
+
+au depart le serpent est de tête orange claire et de corps noir avec une longueur de 8rem mais en px et 8px de largeur , la pomme a 8px longeur et largeur 
+
+plus le serpent mange , le plus il reccupère de 8px de longeur.
+
+le projet, separes-le en 3 fichier .html (partie accueil avec l'interface du serpent signifiant que le jeux est celui du serpent, contient aussi trois boutons  l'un au dessou de l'autre inscrits dessus ancien score, si quelqu'un veux voir son ancien score , nouveau score puis un dernier bouton pour meilleur score ; des que la personne appuis sur l'un de ses bouton, il va etre envoyé vers une zone grise sombre ou est ecris le score dont il cherche, fait  en sorte qu'apres  chaque nouveau jeux , que le score des pommes mangué par le serpent soit enregistré et pres a etre renvoyé si l'utilisateur clic sur le bouton depuis l'interface d'accueil, gere ca avec le js et le php coté backen)
+ensuite le deuxieme fichier est celui de l'air de jeux  ( ici , background vert très foncé , la surface, je pense que je l'ai signifié en amant ou en aval le cote dimensionnement et design egalement, et l'optique où si le serpent touche l'un des bord du jardin , de l'interieur, le jeu s'arree net et un message est renvoye " votre partie se termine ici  cher gameur ou si tu veux tu peux aléatoirement metre les deux phrase consernés dont  j'usse montionné amant ou aval )
+le jeu aurait pour objectif de manger le plus de pomme vertes du jardin (zone de jeu) sans que le serpent ne heure un bord de la zone de jeu fait en vert très sombre , plus le serpent avale de pomme et plus il prend en longueur , apres avoir mangé une pomme verte la prochaine pomme doit se trouver sur un autre endroit de l'air de jeu choisi aléatoirement et optimalement en fonction de la position de tout le corps du serpent 
+
+une troisieme parite ou il y'a un fichier help.txt lie a un petit bouton sur le premier fichier.html qui permettra de mettre un petite documentation bien detaillé sur comment conctionne le jeux, comment faire pour gagner le plus ou conserver la partie avec des illustrations simple mais très explicatifs du jeu  en detail ; aussi ajoute a la fin de cette troisiemme partie et exclusivement pour cette 3 eme partie ou plutot troisieme fichier.html un footer ou tu inscrira les choses suivantes "@2026 Christ Amany MBOUNGOU | tous droit reservé  06 722 1312 "  merci  
+
+
+n'oubie pas integre dans le js que des que le serpent touche une partie du bord la partie s'arrete net et on affiche partie terminée cher gameur 
+
+ajoute 4 bouton vers le bas et bien stylisé contenant des fleches de direction ( haut , bas,gauche et drouite ) afin de diriger le serpent, tout ses boutons sont en contact avec la tete du serpent qui s'execute en temps reelle 
+
+
+ajoute aussi dans la base de données et au front aussi une quatrieme option mais tu la positionne en premier, celle ecrite : nouveau Jeux  suivi de ancien score, nouveau score et meilleur score a la fin 
+
+la zone exterieur ou hors jeu est grize et pas permi de jouer le serpent n'est que sur la zone de jeux , 
+et integre une base de donn"es sql de ton chois et integre à la fin de la partie de jeu des données des scores recents, du score ancien et du  meilleur score  une partie ou si quelqu'un a fait un plus grand score  
+qu'on ecrive plus grand score de ce jeu est : avec une emojie de quelqu'un qui est content avec une coupe dans ca main 
+
+les technologies a utiliser html,tailindcss( à installer ), css ;javascript( pour le fronten et le backen aussi ) et php pour le backen , toutes ces technologies sont importantes stp

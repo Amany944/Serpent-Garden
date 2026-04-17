@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Serpent Garden | Aide</title>
+  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page-shell page-shell--help">
+  <main class="help-layout">
+    <section class="help-card">
+      <p class="eyebrow">Documentation</p>
+      <h1>Comment jouer</h1>
+      <div id="helpContent" class="help-content">Chargement du guide...</div>
+      <a class="menu-button menu-button--primary help-back" href="index.html">Retour accueil</a>
+    </section>
+  </main>
+
+  <footer class="help-footer">@2026 Christ Amany MBOUNGOU | tous droit reserve  06 722 1312</footer>
+
+  <script>
+    fetch('help.txt')
+      .then((response) => response.text())
+      .then((text) => {
+        document.getElementById('helpContent').textContent = text;
+      })
+      .catch(() => {
+        document.getElementById('helpContent').textContent = 'Le fichier help.txt est indisponible pour le moment.';
+      });
+  </script>
+</body>
+</html>

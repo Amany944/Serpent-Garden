@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Serpent Garden | Accueil</title>
+  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="page-shell">
+  <main class="home-layout grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+    <section class="hero-card p-5 sm:p-6 md:p-8">
+      <div class="hero-copy">
+        <p class="eyebrow">Arcade HTML / JS / PHP</p>
+        <h1>Serpent Garden</h1>
+        <p class="hero-text">
+          Dirige le serpent, mange les pommes vertes, evite les bords et garde ton meilleur score en memoire.
+        </p>
+      </div>
+
+      <div class="snake-preview w-full" aria-hidden="true">
+        <div class="snake-preview__body snake-preview__body--tail"></div>
+        <div class="snake-preview__body snake-preview__body--tail"></div>
+        <div class="snake-preview__body snake-preview__body--tail"></div>
+        <div class="snake-preview__body snake-preview__body--tail"></div>
+        <div class="snake-preview__body snake-preview__body--body"></div>
+        <div class="snake-preview__head">
+          <span class="eye eye--left"></span>
+          <span class="eye eye--right"></span>
+          <span class="mouth"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="menu-card p-5 sm:p-6 md:p-8">
+      <h2 class="section-title">Menu principal</h2>
+      <div class="menu-stack">
+        <a class="menu-button menu-button--primary w-full text-center" href="game.html">Nouveau Jeux</a>
+        <button class="menu-button w-full" data-score-mode="previous">Ancien score</button>
+        <button class="menu-button w-full" data-score-mode="latest">Nouveau score</button>
+        <button class="menu-button w-full" data-score-mode="best">Meilleur score</button>
+      </div>
+
+      <div class="menu-footer">
+        <a class="help-link" href="help.html">Aide / documentation</a>
+      </div>
+    </section>
+  </main>
+
+  <section class="score-overlay" id="scoreOverlay" aria-hidden="true">
+    <div class="score-panel" role="dialog" aria-modal="true" aria-labelledby="scoreTitle">
+      <button class="score-close" id="closeScore" type="button" aria-label="Fermer">&times;</button>
+      <p class="score-kicker">Zone de score</p>
+      <h2 id="scoreTitle">Score</h2>
+      <p class="score-value" id="scoreValue">0</p>
+      <p class="score-note" id="scoreNote">Aucune partie n'a encore ete enregistree.</p>
+
+      <div class="score-meta">
+        <div>
+          <span>Ancien score</span>
+          <strong id="metaPrevious">0</strong>
+        </div>
+        <div>
+          <span>Nouveau score</span>
+          <strong id="metaLatest">0</strong>
+        </div>
+        <div>
+          <span>Meilleur score</span>
+          <strong id="metaBest">0</strong>
+        </div>
+      </div>
+
+      <div class="recent-box">
+        <h3>Scores recents</h3>
+        <ul id="recentScores" class="recent-list"></ul>
+      </div>
+    </div>
+  </section>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/home.js"></script>
+</body>
+</html>
