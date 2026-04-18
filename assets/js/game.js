@@ -165,19 +165,14 @@ function chooseApplePosition() {
     }
   }
 
-  const head = STATE.snake[0];
   if (!freeCells.length) {
-    return { x: head.x, y: head.y };
+    return {
+      x: Math.floor(Math.random() * GRID),
+      y: Math.floor(Math.random() * GRID)
+    };
   }
 
-  freeCells.sort((a, b) => {
-    const da = Math.abs(a.x - head.x) + Math.abs(a.y - head.y);
-    const db = Math.abs(b.x - head.x) + Math.abs(b.y - head.y);
-    return db - da;
-  });
-
-  const upperSlice = freeCells.slice(0, Math.max(1, Math.floor(freeCells.length * 0.35)));
-  return upperSlice[Math.floor(Math.random() * upperSlice.length)];
+  return freeCells[Math.floor(Math.random() * freeCells.length)];
 }
 
 function initialSnake() {

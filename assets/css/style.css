@@ -845,13 +845,23 @@ h1 {
 }
 
 @media (max-width: 640px) {
+  html,
+  body {
+    min-height: auto;
+    height: auto;
+  }
+
   .page-shell {
     padding: 12px;
   }
 
   .page-shell--game {
+    min-height: auto;
+    height: auto;
     padding: 10px;
     gap: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .hero-card,
