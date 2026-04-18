@@ -1,0 +1,29 @@
+## Dependencies
+node_modules/
+
+## Build outputs
+assets/css/tailwind.css
+
+## Local data generated at runtime
+data/*.sqlite
+data/*.sqlite-shm
+data/*.sqlite-wal
+
+## Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+## Environment files
+.env
+.env.*
+
+## OS / editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/

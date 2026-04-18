@@ -10,21 +10,20 @@ Tu dois utiliser un vrai serveur PHP. Ouvrir `game.html` en double-cliquant dans
 
 1. Installe XAMPP si ce n'est pas deja fait.
 2. Ouvre le dossier du projet `C:\Users\123\Music\JEU VIDEO JS`.
-3. Copie ce dossier dans `C:\xampp\htdocs\serpent-garden` si tu veux utiliser XAMPP par defaut.
-4. Lance `Apache` depuis le panneau XAMPP.
+3. Lance `start-apache.bat` pour demarrer Apache et ouvrir le projet.
+4. Si besoin, le projet est deja copie dans `C:\xampp\htdocs\serpent-garden`.
 5. Ouvre ton navigateur sur:
-   - `http://localhost/serpent-garden/index.html`
-   - ou `http://localhost/serpent-garden/game.html`
+  - `http://localhost/serpent-garden/index.html`
+  - ou `http://localhost/serpent-garden/game.html`
 6. Lance une partie puis termine-la pour verifier que le score est enregistre.
 
 ### Methode 2: avec le serveur PHP natif
 
 1. Ouvre PowerShell dans le dossier du projet.
-2. Lance le serveur PHP:
-   - `php -S localhost:8000`
+2. Lance `start-xampp.bat`.
 3. Ouvre ensuite dans le navigateur:
-   - `http://localhost:8000/index.html`
-   - ou `http://localhost:8000/game.html`
+  - `http://localhost:8000/index.html`
+  - ou `http://localhost:8000/game.html`
 4. Joue une partie et termine-la pour enregistrer un score.
 
 ## Verification du backend
@@ -55,4 +54,3 @@ Si tout marche, ce fichier apparaitra apres la premiere partie terminee.
 - `assets/js/api.js` liaison front/back
 - `api/index.php` API principale
 - `api/db.php` creation et acces SQLite
-

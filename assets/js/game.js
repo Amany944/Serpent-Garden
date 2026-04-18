@@ -1,5 +1,6 @@
 const canvas = document.getElementById('snakeCanvas');
 const ctx = canvas.getContext('2d');
+const boardFrame = document.querySelector('.board-frame');
 const scoreLive = document.getElementById('scoreLive');
 const bestLive = document.getElementById('bestLive');
 const previousLive = document.getElementById('previousLive');
@@ -12,9 +13,13 @@ const bestMessage = document.getElementById('bestMessage');
 const gameOverReason = document.getElementById('gameOverReason');
 const playAgainButton = document.getElementById('playAgainButton');
 const restartButton = document.getElementById('restartButton');
+const pauseButton = document.getElementById('pauseButton');
+const resumeButton = document.getElementById('resumeButton');
+const pauseBadge = document.getElementById('pauseBadge');
 
-const CELL = 8;
-const GRID = canvas.width / CELL;
+const GRID = 80;
+let CELL = canvas.width / GRID;
+let BOARD_SIZE = canvas.width;
 const BASE_TICK_MS = 180;
 const MIN_TICK_MS = 100;
 
@@ -36,6 +41,7 @@ const STATE = {
   timer: null,
   currentTick: BASE_TICK_MS,
   running: false,
+  paused: false,
   gameOver: false,
   started: false
 };
@@ -69,6 +75,33 @@ function cloneDirection(dir) {
   return { x: dir.x, y: dir.y };
 }
 
+function resizeCanvas({ rerender = true } = {}) {
+  if (!boardFrame) {
+    return;
+  }
+
+  const styles = window.getComputedStyle(boardFrame);
+  const paddingX = parseFloat(styles.paddingLeft) + parseFloat(styles.paddingRight);
+  const paddingY = parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
+  const usableWidth = Math.max(1, Math.floor(boardFrame.clientWidth - paddingX));
+  const usableHeight = Math.max(1, Math.floor(boardFrame.clientHeight - paddingY));
+  const usableSize = Math.max(1, Math.floor(Math.min(usableWidth, usableHeight)));
+  const dpr = window.devicePixelRatio || 1;
+
+  BOARD_SIZE = usableSize;
+  CELL = BOARD_SIZE / GRID;
+
+  canvas.style.width = `${BOARD_SIZE}px`;
+  canvas.style.height = `${BOARD_SIZE}px`;
+  canvas.width = Math.floor(BOARD_SIZE * dpr);
+  canvas.height = Math.floor(BOARD_SIZE * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  if (rerender && STATE.snake.length) {
+    render();
+  }
+}
+
 function getTickMs(score) {
   if (score < 11) {
     return BASE_TICK_MS;
@@ -96,6 +129,28 @@ function syncSpeed() {
   clearInterval(STATE.timer);
   STATE.currentTick = desiredTick;
   STATE.timer = setInterval(moveSnake, STATE.currentTick);
+}
+
+function startTimer() {
+  clearInterval(STATE.timer);
+  STATE.timer = setInterval(moveSnake, STATE.currentTick);
+}
+
+function stopTimer() {
+  clearInterval(STATE.timer);
+  STATE.timer = null;
+}
+
+function syncPauseButtons() {
+  if (!pauseButton || !resumeButton) {
+    return;
+  }
+
+  pauseButton.hidden = !STATE.started || STATE.gameOver || STATE.paused;
+  resumeButton.hidden = !STATE.started || STATE.gameOver || !STATE.paused;
+  if (pauseBadge) {
+    pauseBadge.hidden = !STATE.paused;
+  }
 }
 
 function chooseApplePosition() {
@@ -145,19 +200,19 @@ function updateStatus() {
 }
 
 function drawBackground() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.clearRect(0, 0, BOARD_SIZE, BOARD_SIZE);
 
-  const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  const gradient = ctx.createLinearGradient(0, 0, 0, BOARD_SIZE);
   gradient.addColorStop(0, '#06321a');
   gradient.addColorStop(1, '#02140a');
   ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, BOARD_SIZE, BOARD_SIZE);
 
   ctx.fillStyle = 'rgba(255,255,255,0.025)';
   for (let i = 0; i < GRID; i += 1) {
     if (i % 4 === 0) {
-      ctx.fillRect(i * CELL, 0, 1, canvas.height);
-      ctx.fillRect(0, i * CELL, canvas.width, 1);
+      ctx.fillRect(i * CELL, 0, 1, BOARD_SIZE);
+      ctx.fillRect(0, i * CELL, BOARD_SIZE, 1);
     }
   }
 }
@@ -214,8 +269,9 @@ function endGame(reason) {
 
   STATE.gameOver = true;
   STATE.running = false;
-  clearInterval(STATE.timer);
-  STATE.timer = null;
+  STATE.paused = false;
+  stopTimer();
+  syncPauseButtons();
   gameMessage.textContent = reason;
   gameOverReason.textContent = reason;
 
@@ -247,7 +303,7 @@ function endGame(reason) {
 }
 
 function moveSnake() {
-  if (STATE.gameOver) {
+  if (STATE.gameOver || STATE.paused) {
     return;
   }
 
@@ -316,14 +372,14 @@ function setDirection(name) {
 }
 
 function resetGame() {
-  clearInterval(STATE.timer);
-  STATE.timer = null;
+  stopTimer();
   STATE.snake = initialSnake();
   STATE.direction = cloneDirection(DIRECTIONS.right);
   STATE.nextDirection = cloneDirection(DIRECTIONS.right);
   STATE.apple = chooseApplePosition();
   STATE.score = 0;
   STATE.running = false;
+  STATE.paused = false;
   STATE.gameOver = false;
   STATE.started = false;
   STATE.currentTick = BASE_TICK_MS;
@@ -332,15 +388,43 @@ function resetGame() {
   gameOverOverlay.classList.remove('is-open');
   gameMessage.innerHTML = 'Clique sur <strong>Rejouer</strong> ou <strong>Nouveau jeux</strong> pour lancer la partie.';
   updateStatus();
+  syncPauseButtons();
   render();
 }
 
 function startGame() {
   resetGame();
   STATE.started = true;
+  STATE.running = true;
+  STATE.paused = false;
   STATE.currentTick = getTickMs(STATE.score);
-  STATE.timer = setInterval(moveSnake, STATE.currentTick);
+  startTimer();
+  syncPauseButtons();
   gameMessage.innerHTML = 'La partie a commence. Observe le serpent se deplacer lentement.';
+}
+
+function pauseGame() {
+  if (!STATE.started || STATE.gameOver || STATE.paused) {
+    return;
+  }
+
+  STATE.paused = true;
+  STATE.running = false;
+  stopTimer();
+  syncPauseButtons();
+  gameMessage.innerHTML = 'Jeu en pause. Clique sur <strong>Reprendre la partie</strong> pour continuer.';
+}
+
+function resumeGame() {
+  if (!STATE.started || STATE.gameOver || !STATE.paused) {
+    return;
+  }
+
+  STATE.paused = false;
+  STATE.running = true;
+  startTimer();
+  syncPauseButtons();
+  gameMessage.innerHTML = 'La partie reprend.';
 }
 
 document.querySelectorAll('[data-direction]').forEach((button) => {
@@ -368,21 +452,37 @@ document.addEventListener('keydown', (event) => {
 
 restartButton.addEventListener('click', startGame);
 playAgainButton.addEventListener('click', startGame);
+pauseButton.addEventListener('click', pauseGame);
+resumeButton.addEventListener('click', resumeGame);
+
+window.addEventListener('resize', () => {
+  resizeCanvas();
+});
+
+if (window.ResizeObserver && boardFrame) {
+  const observer = new ResizeObserver(() => {
+    resizeCanvas();
+  });
+
+  observer.observe(boardFrame);
+}
 
 apiStats()
   .then((payload) => {
     STATE.previousScore = payload.stats.previous_score;
     STATE.bestScore = payload.stats.best_score;
     updateStatus();
+    resizeCanvas({ rerender: false });
     resetGame();
   })
   .catch(() => {
     STATE.previousScore = 0;
     STATE.bestScore = 0;
     updateStatus();
+    resizeCanvas({ rerender: false });
     resetGame();
 });
 
 window.addEventListener('beforeunload', () => {
-  clearInterval(STATE.timer);
+  stopTimer();
 });

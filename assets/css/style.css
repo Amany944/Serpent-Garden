@@ -8,8 +8,10 @@
   --accent: #8cff7b;
   --accent-strong: #56f07a;
   --danger: #f97373;
-  --shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+  --shadow: 0 22px 64px rgba(0, 0, 0, 0.28);
+  --shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.18);
   --radius: 24px;
+  --radius-sm: 16px;
 }
 
 * {
@@ -18,6 +20,7 @@
 
 html, body {
   min-height: 100%;
+  height: 100%;
 }
 
 body {
@@ -25,8 +28,30 @@ body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top, rgba(136, 255, 168, 0.14), transparent 40%),
+    radial-gradient(circle at 20% 0%, rgba(136, 255, 168, 0.12), transparent 26%),
+    radial-gradient(circle at 80% 10%, rgba(109, 255, 184, 0.08), transparent 22%),
     linear-gradient(180deg, #0e1c12 0%, #07120c 100%);
+  position: relative;
+  isolation: isolate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background:
+    linear-gradient(transparent 0 0),
+    repeating-linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 0.045) 0,
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  mix-blend-mode: soft-light;
+  z-index: -1;
 }
 
 a {
@@ -45,8 +70,21 @@ button {
 
 .page-shell--game {
   display: grid;
-  gap: 20px;
-  background: linear-gradient(180deg, #8a9099 0%, #69707a 100%);
+  height: 100vh;
+  min-height: 100vh;
+  padding: clamp(10px, 1.4vw, 18px);
+  gap: clamp(10px, 1.2vw, 16px);
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.12), transparent 28%),
+    linear-gradient(180deg, #89909b 0%, #676f79 100%);
+  overflow: hidden;
+}
+
+@supports (height: 100dvh) {
+  .page-shell--game {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
 }
 
 .page-shell--help {
@@ -74,7 +112,13 @@ button {
   background: var(--panel);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px) saturate(1.12);
+}
+
+.game-topbar,
+.game-stats,
+.game-brand {
+  min-width: 0;
 }
 
 .hero-card {
@@ -247,7 +291,7 @@ h1 {
     0 12px 28px rgba(0, 0, 0, 0.22),
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -10px 18px rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px) saturate(1.12);
   transform: translateY(0);
   transition:
     transform 0.18s ease,
@@ -467,14 +511,57 @@ h1 {
 }
 
 .game-topbar {
-  max-width: 1180px;
+  max-width: none;
   width: 100%;
-  margin: 0 auto;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(0, 1.35fr);
+  gap: 14px;
+  align-items: stretch;
+  flex: 0 0 auto;
+}
+
+.game-brand {
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(145deg, rgba(6, 27, 14, 0.95), rgba(3, 14, 7, 0.96)),
+    radial-gradient(circle at top right, rgba(128, 255, 141, 0.2), transparent 34%);
+  border: 1px solid rgba(140, 255, 158, 0.16);
+  box-shadow: var(--shadow);
+  display: grid;
+  gap: 4px;
+  align-content: start;
+}
+
+.game-brand__kicker {
+  margin: 0;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.game-brand__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+  line-height: 1;
+  color: #f4fff6;
+}
+
+.game-brand__text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  max-width: 42ch;
+}
+
+.game-stats {
+  display: grid;
+  grid-template-columns: 1.15fr repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
 }
 
 .back-link,
@@ -484,9 +571,10 @@ h1 {
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  border-radius: 14px;
+  border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-soft);
 }
 
 .status-pill span {
@@ -499,8 +587,8 @@ h1 {
 }
 
 .status-pill--compact {
-  min-height: 42px;
-  padding: 10px 12px;
+  min-height: 25px;
+  padding: 6px 8px;
   gap: 8px;
 }
 
@@ -513,58 +601,111 @@ h1 {
 }
 
 .game-layout {
-  max-width: 1180px;
+  max-width: none;
   width: 100%;
-  margin: 0 auto;
+  margin: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1.45fr) clamp(170px, 15vw, 260px);
+  gap: 16px;
   align-items: start;
+  min-height: 0;
+  height: 100%;
 }
 
 .board-shell {
-  padding: 14px;
-  background: linear-gradient(180deg, rgba(7, 37, 17, 0.92), rgba(3, 19, 9, 0.95));
+  padding: 32px;
+  background:
+    linear-gradient(180deg, rgba(7, 37, 17, 0.92), rgba(3, 19, 9, 0.96)),
+    radial-gradient(circle at top, rgba(140, 255, 143, 0.14), transparent 30%);
+  min-height: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  height: 100%;
 }
 
 .board-frame {
-  padding: 8px;
-  border-radius: 18px;
+  padding: 12px;
+  border-radius: 20px;
   background: radial-gradient(circle at top, rgba(140, 255, 143, 0.12), transparent 28%), var(--bg-deep);
   border: 2px solid rgba(134, 255, 150, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
-#snakeCanvas {
+.snake-canvas {
   display: block;
-  width: min(100%, 640px);
-  height: auto;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
   aspect-ratio: 1 / 1;
   border-radius: 14px;
   background:
     linear-gradient(180deg, rgba(4, 39, 14, 0.98), rgba(3, 24, 10, 0.98));
   border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .game-message {
-  min-height: 44px;
-  margin-top: 10px;
-  padding: 10px 14px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  min-height: 48px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
   color: #d8e8dd;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pause-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(11, 38, 21, 0.9);
+  color: #d9ffe0;
+  border: 1px solid rgba(146, 255, 168, 0.22);
+  box-shadow: var(--shadow-soft);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .control-stack {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   position: sticky;
   top: 18px;
+  align-self: start;
+  max-width: none;
+  padding: 16px;
+  border-radius: var(--radius);
+  background:
+    linear-gradient(180deg, rgba(7, 26, 17, 0.94), rgba(3, 16, 9, 0.98)),
+    radial-gradient(circle at top, rgba(135, 255, 155, 0.12), transparent 36%);
+  border: 1px solid rgba(140, 255, 158, 0.14);
+  box-shadow: var(--shadow);
+}
+
+.control-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.control-actions .game-btn--desktop-half {
+  width: 100%;
 }
 
 .direction-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
+  gap: 10px;
 }
 
 .direction-button {
@@ -634,6 +775,18 @@ h1 {
 }
 
 @media (max-width: 960px) {
+  .game-topbar {
+    grid-template-columns: 1fr;
+  }
+
+  .game-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .game-stats .back-link {
+    grid-column: 1 / -1;
+  }
+
   .home-layout,
   .game-layout {
     grid-template-columns: 1fr;
@@ -643,12 +796,13 @@ h1 {
     position: static;
     grid-template-columns: 1fr;
     max-width: 100%;
+    top: auto;
   }
 }
 
 @media (min-width: 641px) {
   .page-shell--game {
-    gap: 12px;
+    gap: 10px;
   }
 
   .hero-card {
@@ -667,11 +821,24 @@ h1 {
     top: 8px;
   }
 
+  .back-link,
+  .menu-button {
+    min-height: 38px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    font-size: 0.92rem;
+  }
+
+  .game-btn--back,
+  .game-btn--primary {
+    min-height: 38px;
+  }
+
   .game-btn--desktop-half {
-    width: 50%;
-    min-height: 40px;
-    padding: 8px 10px;
-    font-size: 0.9rem;
+    width: 42%;
+    min-height: 36px;
+    padding: 7px 10px;
+    font-size: 0.88rem;
     align-self: center;
     border-radius: 14px;
   }
@@ -679,7 +846,12 @@ h1 {
 
 @media (max-width: 640px) {
   .page-shell {
-    padding: 16px;
+    padding: 12px;
+  }
+
+  .page-shell--game {
+    padding: 10px;
+    gap: 10px;
   }
 
   .hero-card,
@@ -704,6 +876,10 @@ h1 {
     width: 100%;
   }
 
+  .game-stats {
+    grid-template-columns: 1fr;
+  }
+
   .score-panel,
   .score-panel--gameover {
     padding: 18px;
@@ -721,17 +897,22 @@ h1 {
     padding: 8px;
   }
 
-  #snakeCanvas {
-    width: min(100%, 340px);
+  .snake-canvas {
+    width: 100%;
   }
 
   .game-message {
-    min-height: 48px;
+    min-height: 52px;
     margin-top: 10px;
     padding: 12px 14px;
   }
 
   .control-stack {
-    max-width: 220px;
+    max-width: none;
+    padding: 14px;
+  }
+
+  .game-layout {
+    height: auto;
   }
 }
