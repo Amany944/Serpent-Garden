@@ -28,14 +28,14 @@ Illustration simple :
 - Fleche droite : aller a droite
 
 4. COMMENT GAGNER
-- Reste au centre de la zone.
+- Reste au centre de la zonensi possible.
 - Anticipe les bords.
-- Evite de te croiser.
-- Cherche a aligner les pommes sans te fermer la route.
+- Evite de t'entre croiser toi-même.
+- Cherche à aligner les pommes sans te fermer la route.
 
 5. SCORES
-- Nouveau score : derniere partie terminee.
-- Ancien score : partie precedente.
+- Nouveau score : derniere partie terminée.
+- Ancien score : partie précédente.
 - Meilleur score : record total.
 
 6. CONSEIL

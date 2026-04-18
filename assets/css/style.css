@@ -40,7 +40,7 @@ button {
 
 .page-shell {
   min-height: 100vh;
-  padding: 24px;
+  padding: 16px;
 }
 
 .page-shell--game {
@@ -189,13 +189,28 @@ h1 {
   gap: 12px;
 }
 
-.menu-button,
+.menu-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.direction-button--up{
+  padding: 6px 8px;
+}
 .direction-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 54px;
-  padding: 14px 18px;
+  min-height: 48px;
+  padding: 8px 10px;
   border: 0;
   border-radius: 18px;
   cursor: pointer;
@@ -222,6 +237,94 @@ h1 {
 .menu-button--primary {
   background: linear-gradient(180deg, #97ff8a, #59db7b);
   color: #062110;
+}
+
+.game-btn {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(192, 255, 194, 0.18);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -10px 18px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(10px);
+  transform: translateY(0);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.game-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.22), transparent 36%),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.08), transparent 48%);
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.game-btn--arrow {
+  min-width: 46px;
+  min-height: 46px;
+  padding: 0;
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(42, 109, 72, 0.96), rgba(14, 42, 27, 0.98)),
+    radial-gradient(circle at top, rgba(166, 255, 192, 0.22), transparent 38%);
+  color: #f3fff4;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.game-btn--primary {
+  min-height: 46px;
+  border-radius: 16px;
+  background:
+    linear-gradient(180deg, #caffc3, #73e18a),
+    linear-gradient(120deg, rgba(255, 255, 255, 0.3), transparent 55%);
+  color: #062110;
+  letter-spacing: 0.02em;
+}
+
+.game-btn--desktop-half {
+  width: 100%;
+}
+
+.game-btn--back {
+  min-height: 42px;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(20, 43, 30, 0.96), rgba(9, 21, 15, 0.98)),
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.06), transparent 48%);
+  color: #ecfff2;
+}
+
+.game-btn:hover::after,
+.game-btn:focus-visible::after {
+  opacity: 0.7;
+}
+
+.game-btn:hover,
+.game-btn:focus-visible {
+  transform: translateY(-1px) scale(1.01);
+  border-color: rgba(220, 255, 221, 0.32);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -12px 18px rgba(0, 0, 0, 0.16);
+  outline: none;
+  filter: saturate(1.05);
+}
+
+.game-btn:active {
+  transform: translateY(0) scale(0.985);
+  box-shadow:
+    0 8px 18px rgba(0, 0, 0, 0.2),
+    inset 0 2px 6px rgba(0, 0, 0, 0.18);
 }
 
 .menu-footer {
@@ -368,7 +471,7 @@ h1 {
   width: 100%;
   margin: 0 auto;
   display: flex;
-  gap: 12px;
+  gap: 8px;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
@@ -376,12 +479,12 @@ h1 {
 
 .back-link,
 .status-pill {
-  min-height: 48px;
+  min-height: 42px;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 12px 16px;
-  border-radius: 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -395,24 +498,38 @@ h1 {
   font-size: 1.05rem;
 }
 
+.status-pill--compact {
+  min-height: 42px;
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.status-pill--compact span {
+  font-size: 0.8rem;
+}
+
+.status-pill--compact strong {
+  font-size: 0.98rem;
+}
+
 .game-layout {
   max-width: 1180px;
   width: 100%;
   margin: 0 auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 20px;
+  gap: 12px;
   align-items: start;
 }
 
 .board-shell {
-  padding: 18px;
+  padding: 14px;
   background: linear-gradient(180deg, rgba(7, 37, 17, 0.92), rgba(3, 19, 9, 0.95));
 }
 
 .board-frame {
-  padding: 10px;
-  border-radius: 22px;
+  padding: 8px;
+  border-radius: 18px;
   background: radial-gradient(circle at top, rgba(140, 255, 143, 0.12), transparent 28%), var(--bg-deep);
   border: 2px solid rgba(134, 255, 150, 0.12);
 }
@@ -429,17 +546,17 @@ h1 {
 }
 
 .game-message {
-  min-height: 54px;
-  margin-top: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
+  min-height: 44px;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.05);
   color: #d8e8dd;
 }
 
 .control-stack {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   position: sticky;
   top: 18px;
 }
@@ -447,19 +564,44 @@ h1 {
 .direction-row {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 8px;
 }
 
 .direction-button {
-  min-height: 62px;
-  font-size: 1.5rem;
-  background: linear-gradient(180deg, #14412b, #0b2015);
-  color: white;
-  border: 1px solid rgba(156, 214, 171, 0.16);
+  min-height: 46px;
+  font-size: 1.2rem;
+  background:
+    linear-gradient(180deg, rgba(42, 109, 72, 0.98), rgba(14, 42, 27, 0.98)),
+    radial-gradient(circle at top, rgba(171, 255, 190, 0.24), transparent 40%);
+  color: #f5fff6;
+  border: 1px solid rgba(167, 224, 177, 0.22);
+  box-shadow:
+    0 10px 22px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.direction-button::after {
+  opacity: 0.38;
+}
+
+.direction-button:hover,
+.direction-button:focus-visible {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow:
+    0 14px 28px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.direction-button:active {
+  transform: translateY(0) scale(0.97);
 }
 
 .direction-button--up {
   width: 100%;
+}
+
+.direction-row .direction-button {
+  border-radius: 14px;
 }
 
 .help-layout {
@@ -504,6 +646,37 @@ h1 {
   }
 }
 
+@media (min-width: 641px) {
+  .page-shell--game {
+    gap: 12px;
+  }
+
+  .hero-card {
+    min-height: auto;
+  }
+
+  .board-shell {
+    min-height: 0;
+  }
+
+  .game-layout {
+    align-items: stretch;
+  }
+
+  .control-stack {
+    top: 8px;
+  }
+
+  .game-btn--desktop-half {
+    width: 50%;
+    min-height: 40px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    align-self: center;
+    border-radius: 14px;
+  }
+}
+
 @media (max-width: 640px) {
   .page-shell {
     padding: 16px;
@@ -538,5 +711,27 @@ h1 {
 
   .score-overlay {
     padding: 14px;
+  }
+
+  .board-shell {
+    padding: 12px;
+  }
+
+  .board-frame {
+    padding: 8px;
+  }
+
+  #snakeCanvas {
+    width: min(100%, 340px);
+  }
+
+  .game-message {
+    min-height: 48px;
+    margin-top: 10px;
+    padding: 12px 14px;
+  }
+
+  .control-stack {
+    max-width: 220px;
   }
 }

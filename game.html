@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr" class="h-full">
+<html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -7,30 +7,30 @@
   <link rel="stylesheet" href="assets/css/tailwind.css">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="page-shell page-shell--game h-screen overflow-x-hidden grid grid-rows-[auto,1fr]">
-  <header class="game-topbar flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:gap-3">
-    <a class="back-link w-full sm:w-auto justify-center" href="index.html">Retour accueil</a>
-    <div class="status-pill w-full sm:w-auto justify-between sm:justify-start"><span>Score</span><strong id="scoreLive">0</strong></div>
-    <div class="status-pill w-full sm:w-auto justify-between sm:justify-start"><span>Meilleur</span><strong id="bestLive">0</strong></div>
-    <div class="status-pill w-full sm:w-auto justify-between sm:justify-start"><span>Ancien</span><strong id="previousLive">0</strong></div>
+<body class="page-shell page-shell--game h-screen overflow-hidden grid grid-rows-[auto,1fr]">
+  <header class="game-topbar flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-2 py-0 sm:py-0">
+    <a class="back-link game-btn game-btn--back w-full sm:w-auto justify-center sm:justify-start" href="index.html">Retour accueil</a>
+    <div class="status-pill status-pill--compact w-full sm:w-auto justify-between sm:justify-start"><span>Score</span><strong id="scoreLive">0</strong></div>
+    <div class="status-pill status-pill--compact w-full sm:w-auto justify-between sm:justify-start"><span>Meilleur</span><strong id="bestLive">0</strong></div>
+    <div class="status-pill status-pill--compact w-full sm:w-auto justify-between sm:justify-start"><span>Ancien</span><strong id="previousLive">0</strong></div>
   </header>
 
-  <main class="game-layout h-full min-h-0 gap-4 md:gap-5">
-    <section class="board-shell w-full">
-      <div class="board-frame">
-        <canvas id="snakeCanvas" width="640" height="640" aria-label="Zone de jeu"></canvas>
+  <main class="game-layout h-full min-h-0 gap-3 md:gap-4">
+    <section class="board-shell w-full p-2 sm:p-3 md:p-4">
+      <div class="board-frame p-2 sm:p-2 md:p-3">
+        <canvas id="snakeCanvas" class="w-full max-w-[320px] sm:max-w-[560px] md:max-w-[640px] mx-auto" width="640" height="640" aria-label="Zone de jeu"></canvas>
       </div>
-      <div class="game-message text-sm sm:text-base" id="gameMessage">Clique sur <strong>Rejouer</strong> ou <strong>Nouveau jeux</strong> pour lancer la partie.</div>
+      <div class="game-message text-sm sm:text-base mt-2 md:mt-3 py-2 md:py-3" id="gameMessage">Clique sur <strong>Rejouer</strong> ou <strong>Nouveau jeux</strong> pour lancer la partie.</div>
     </section>
 
-    <aside class="control-stack w-full max-w-[260px] sm:max-w-none mx-auto sm:mx-0" aria-label="Controle du serpent">
-      <button class="direction-button direction-button--up w-full" data-direction="up" type="button">&uarr;</button>
+    <aside class="control-stack w-full max-w-[170px] sm:max-w-none mx-auto sm:mx-0" aria-label="Controle du serpent">
+      <button class="direction-button direction-button--up game-btn game-btn--arrow w-full" data-direction="up" type="button">&uarr;</button>
       <div class="direction-row w-full">
-        <button class="direction-button" data-direction="left" type="button">&larr;</button>
-        <button class="direction-button" data-direction="down" type="button">&darr;</button>
-        <button class="direction-button" data-direction="right" type="button">&rarr;</button>
+        <button class="direction-button game-btn game-btn--arrow" data-direction="left" type="button">&larr;</button>
+        <button class="direction-button game-btn game-btn--arrow" data-direction="down" type="button">&darr;</button>
+        <button class="direction-button game-btn game-btn--arrow" data-direction="right" type="button">&rarr;</button>
       </div>
-      <button class="menu-button menu-button--primary w-full" id="restartButton" type="button">Nouveau jeux</button>
+      <button class="menu-button menu-button--primary game-btn game-btn--primary game-btn--desktop-half w-full" id="restartButton" type="button">Nouveau jeux</button>
     </aside>
   </main>
 
@@ -55,8 +55,8 @@
       </div>
       <p class="score-note score-note--highlight" id="bestMessage"></p>
       <div class="score-actions flex flex-col sm:flex-row gap-3">
-        <button class="menu-button menu-button--primary w-full" id="playAgainButton" type="button">Rejouer</button>
-        <a class="menu-button w-full text-center" href="index.html">Accueil</a>
+        <button class="menu-button menu-button--primary game-btn game-btn--primary game-btn--desktop-half w-full" id="playAgainButton" type="button">Rejouer</button>
+        <a class="menu-button game-btn game-btn--back w-full text-center" href="index.html">Accueil</a>
       </div>
     </div>
   </section>
