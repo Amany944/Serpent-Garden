@@ -11,17 +11,22 @@ const finalPrevious = document.getElementById('finalPrevious');
 const finalBest = document.getElementById('finalBest');
 const bestMessage = document.getElementById('bestMessage');
 const gameOverReason = document.getElementById('gameOverReason');
+const recentGameTimeMessage = document.getElementById('recentGameTimeMessage');
 const playAgainButton = document.getElementById('playAgainButton');
 const restartButton = document.getElementById('restartButton');
 const pauseButton = document.getElementById('pauseButton');
 const resumeButton = document.getElementById('resumeButton');
 const pauseBadge = document.getElementById('pauseBadge');
+const timeProbeButton = document.getElementById('timeProbeButton');
+const timeProbeValue = document.getElementById('timeProbeValue');
 
 const GRID = 80;
 let CELL = canvas.width / GRID;
 let BOARD_SIZE = canvas.width;
 const BASE_TICK_MS = 180;
-const MIN_TICK_MS = 100;
+const MIN_TICK_MS = 108;
+const APPLES_PER_SPEED_STEP = 10;
+const TICK_REDUCTION_PER_STEP = 12;
 
 const DIRECTIONS = {
   up: { x: 0, y: -1 },
@@ -40,6 +45,8 @@ const STATE = {
   bestScore: 0,
   timer: null,
   currentTick: BASE_TICK_MS,
+  timeStartedAt: 0,
+  elapsedMs: 0,
   running: false,
   paused: false,
   gameOver: false,
@@ -75,6 +82,66 @@ function cloneDirection(dir) {
   return { x: dir.x, y: dir.y };
 }
 
+function formatGameTime(totalMs) {
+  const totalSeconds = Math.max(0, Math.floor(totalMs / 1000));
+  const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+  const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+  const seconds = String(totalSeconds % 60).padStart(2, '0');
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+function formatRecentGameDuration(totalMs) {
+  const totalSeconds = Math.max(0, Math.floor(totalMs / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+
+  if (hours > 0) {
+    return `${String(hours).padStart(2, '0')} h ${String(minutes).padStart(2, '0')} min ${String(seconds).padStart(2, '0')} s`;
+  }
+
+  return `${String(minutes).padStart(2, '0')} min ${String(seconds).padStart(2, '0')} s`;
+}
+
+function getElapsedGameMs() {
+  if (!STATE.started) {
+    return STATE.elapsedMs;
+  }
+
+  if (STATE.timeStartedAt) {
+    return STATE.elapsedMs + (Date.now() - STATE.timeStartedAt);
+  }
+
+  return STATE.elapsedMs;
+}
+
+function updateTimeProbeDisplay() {
+  if (!timeProbeValue) {
+    return;
+  }
+
+  const formatted = formatGameTime(getElapsedGameMs());
+  timeProbeValue.textContent = formatted;
+  timeProbeValue.value = formatted;
+  if (timeProbeButton) {
+    timeProbeButton.title = `Temps de jeu : ${formatted}`;
+    timeProbeButton.setAttribute('aria-label', `Afficher le temps de jeu : ${formatted}`);
+  }
+}
+
+function startGameClock() {
+  STATE.timeStartedAt = Date.now();
+  updateTimeProbeDisplay();
+}
+
+function stopGameClock() {
+  if (STATE.timeStartedAt) {
+    STATE.elapsedMs += Date.now() - STATE.timeStartedAt;
+    STATE.timeStartedAt = 0;
+  }
+  updateTimeProbeDisplay();
+}
+
 function resizeCanvas({ rerender = true } = {}) {
   if (!boardFrame) {
     return;
@@ -103,16 +170,8 @@ function resizeCanvas({ rerender = true } = {}) {
 }
 
 function getTickMs(score) {
-  if (score < 11) {
-    return BASE_TICK_MS;
-  }
-
-  if (score < 20) {
-    return 170;
-  }
-
-  const extraSteps = Math.floor((score - 20) / 10) + 1;
-  return Math.max(MIN_TICK_MS, 162 - ((extraSteps - 1) * 8));
+  const speedSteps = Math.floor(score / APPLES_PER_SPEED_STEP);
+  return Math.max(MIN_TICK_MS, BASE_TICK_MS - (speedSteps * TICK_REDUCTION_PER_STEP));
 }
 
 function syncSpeed() {
@@ -173,6 +232,10 @@ function chooseApplePosition() {
   }
 
   return freeCells[Math.floor(Math.random() * freeCells.length)];
+}
+
+function spawnApple() {
+  STATE.apple = chooseApplePosition();
 }
 
 function initialSnake() {
@@ -262,6 +325,8 @@ function endGame(reason) {
     return;
   }
 
+  stopGameClock();
+  const recentGameDuration = formatRecentGameDuration(getElapsedGameMs());
   STATE.gameOver = true;
   STATE.running = false;
   STATE.paused = false;
@@ -269,6 +334,9 @@ function endGame(reason) {
   syncPauseButtons();
   gameMessage.textContent = reason;
   gameOverReason.textContent = reason;
+  if (recentGameTimeMessage) {
+    recentGameTimeMessage.textContent = `Cette recente partie a dure ${recentGameDuration}.`;
+  }
 
   apiSaveScore(STATE.score)
     .then((payload) => {
@@ -336,7 +404,7 @@ function moveSnake() {
 
   if (willEatApple) {
     STATE.score += 1;
-    STATE.apple = chooseApplePosition();
+    spawnApple();
     if (STATE.score > STATE.bestScore) {
       STATE.bestScore = STATE.score;
     }
@@ -371,8 +439,10 @@ function resetGame() {
   STATE.snake = initialSnake();
   STATE.direction = cloneDirection(DIRECTIONS.right);
   STATE.nextDirection = cloneDirection(DIRECTIONS.right);
-  STATE.apple = chooseApplePosition();
+  spawnApple();
   STATE.score = 0;
+  STATE.timeStartedAt = 0;
+  STATE.elapsedMs = 0;
   STATE.running = false;
   STATE.paused = false;
   STATE.gameOver = false;
@@ -382,7 +452,11 @@ function resetGame() {
   gameOverOverlay.dataset.visible = 'false';
   gameOverOverlay.classList.remove('is-open');
   gameMessage.innerHTML = 'Clique sur <strong>Rejouer</strong> ou <strong>Nouveau jeux</strong> pour lancer la partie.';
+  if (recentGameTimeMessage) {
+    recentGameTimeMessage.textContent = 'Cette recente partie a dure 00 min 00 s.';
+  }
   updateStatus();
+  updateTimeProbeDisplay();
   syncPauseButtons();
   render();
 }
@@ -393,6 +467,7 @@ function startGame() {
   STATE.running = true;
   STATE.paused = false;
   STATE.currentTick = getTickMs(STATE.score);
+  startGameClock();
   startTimer();
   syncPauseButtons();
   gameMessage.innerHTML = 'La partie a commence. Observe le serpent se deplacer lentement.';
@@ -403,6 +478,7 @@ function pauseGame() {
     return;
   }
 
+  stopGameClock();
   STATE.paused = true;
   STATE.running = false;
   stopTimer();
@@ -417,6 +493,7 @@ function resumeGame() {
 
   STATE.paused = false;
   STATE.running = true;
+  startGameClock();
   startTimer();
   syncPauseButtons();
   gameMessage.innerHTML = 'La partie reprend.';
@@ -449,6 +526,9 @@ restartButton.addEventListener('click', startGame);
 playAgainButton.addEventListener('click', startGame);
 pauseButton.addEventListener('click', pauseGame);
 resumeButton.addEventListener('click', resumeGame);
+timeProbeButton?.addEventListener('click', () => {
+  updateTimeProbeDisplay();
+});
 
 window.addEventListener('resize', () => {
   resizeCanvas();
@@ -480,5 +560,6 @@ apiStats()
 });
 
 window.addEventListener('beforeunload', () => {
+  stopGameClock();
   stopTimer();
 });
