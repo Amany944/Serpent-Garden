@@ -11,12 +11,12 @@ Si le serpent touche un bord, la partie s'arrete immediatement.
 
 Illustration simple :
 
-  zone grise         zone grise
 ------------------------------------------------
 |                                              |
 |   +--------------------------------------+   |
 |   |   serpent -> OOOO                    |   |
 |   |                * pomme               |   |
+|   |                                      |   |
 |   +--------------------------------------+   |
 |                                              |
 ------------------------------------------------

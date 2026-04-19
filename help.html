@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Serpent Garden | Aide</title>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="assets/css/tailwind.css">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -12,18 +14,138 @@
     <section class="help-card">
       <p class="eyebrow">Documentation</p>
       <h1>Comment jouer</h1>
+      <section class="help-visual" aria-labelledby="helpVisualTitle">
+        <div class="help-visual__header">
+          <h2 id="helpVisualTitle" class="section-title">Illustration du terrain</h2>
+          <p class="help-visual__intro">Voici une vue simple pour comprendre la zone de jeu, le serpent et la pomme.</p>
+        </div>
+        <div class="help-board-demo" aria-label="Illustration du terrain de jeu">
+          <div class="help-board-demo__outside help-board-demo__outside--top" aria-hidden="true"></div>
+          <div class="help-board-demo__middle">
+            <div class="help-board-demo__outside help-board-demo__outside--side" aria-hidden="true"></div>
+            <div class="help-board-demo__playfield">
+              <span class="help-board-demo__label help-board-demo__label--top">Terrain vert : zone jouable</span>
+              <div class="help-board-demo__snake" aria-hidden="true">
+                <span class="help-board-demo__segment"></span>
+                <span class="help-board-demo__segment"></span>
+                <span class="help-board-demo__segment"></span>
+                <span class="help-board-demo__head"></span>
+              </div>
+              <span class="help-board-demo__snake-note">Serpent</span>
+              <span class="help-board-demo__apple" aria-hidden="true"></span>
+              <span class="help-board-demo__apple-note">Pomme a manger</span>
+            </div>
+            <div class="help-board-demo__outside help-board-demo__outside--side" aria-hidden="true"></div>
+          </div>
+          <div class="help-board-demo__outside help-board-demo__outside--bottom">Si le serpent touche le bord, la partie s'arrete.</div>
+        </div>
+        <div class="help-legend" aria-label="Legende de l illustration">
+          <div><span class="help-legend__swatch help-legend__swatch--safe"></span> Zone verte : tu peux circuler</div>
+          <div><span class="help-legend__swatch help-legend__swatch--danger"></span> Bord / zone grise : collision = fin</div>
+          <div><span class="help-legend__swatch help-legend__swatch--apple"></span> Pomme : donne des points et allonge le serpent</div>
+        </div>
+      </section>
       <div id="helpContent" class="help-content">Chargement du guide...</div>
       <a class="menu-button menu-button--primary help-back" href="index.html">Retour accueil</a>
     </section>
   </main>
 
-  <footer class="help-footer">@2026 Christ Amany MBOUNGOU | tous droit reserve  06 722 1312</footer>
+  <footer class="help-footer">@2026 Christ Amany MBOUNGOU | tous droits réservés  06 722 1312 .</footer>
 
   <script>
+    const helpIcons = {
+      1: 'fa-solid fa-bullseye',
+      2: 'fa-solid fa-border-all',
+      3: 'fa-solid fa-gamepad',
+      4: 'fa-solid fa-trophy',
+      5: 'fa-solid fa-chart-line',
+      6: 'fa-solid fa-lightbulb'
+    };
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function renderHelpText(text) {
+      const lines = text.split(/\r?\n/);
+      const parts = [];
+      let listBuffer = [];
+      let asciiBuffer = [];
+
+      function flushList() {
+        if (!listBuffer.length) {
+          return;
+        }
+        parts.push('<ul class="help-list">' + listBuffer.join('') + '</ul>');
+        listBuffer = [];
+      }
+
+      function flushAscii() {
+        if (!asciiBuffer.length) {
+          return;
+        }
+        parts.push('<pre class="help-ascii">' + escapeHtml(asciiBuffer.join('\n')) + '</pre>');
+        asciiBuffer = [];
+      }
+
+      lines.forEach((line) => {
+        const trimmed = line.trim();
+        const sectionMatch = trimmed.match(/^(\d+)\.\s+(.+)$/);
+        const listMatch = trimmed.match(/^-+\s+(.+)$/);
+        const isAsciiLine = /^[|+\- ]+$/.test(line) && trimmed.length > 0;
+
+        if (sectionMatch) {
+          flushList();
+          flushAscii();
+          const number = Number(sectionMatch[1]);
+          const iconClass = helpIcons[number] || 'fa-solid fa-book-open';
+          parts.push(
+            '<section class="help-section">' +
+              '<h2 class="help-section__title">' +
+                '<span class="help-section__icon" aria-hidden="true"><i class="' + iconClass + '"></i></span>' +
+                '<span>' + escapeHtml(sectionMatch[1] + '. ' + sectionMatch[2]) + '</span>' +
+              '</h2>' +
+            '</section>'
+          );
+          return;
+        }
+
+        if (isAsciiLine) {
+          flushList();
+          asciiBuffer.push(line);
+          return;
+        }
+
+        flushAscii();
+
+        if (!trimmed) {
+          flushList();
+          return;
+        }
+
+        if (listMatch) {
+          listBuffer.push('<li>' + escapeHtml(listMatch[1]) + '</li>');
+          return;
+        }
+
+        parts.push('<p>' + escapeHtml(trimmed) + '</p>');
+      });
+
+      flushList();
+      flushAscii();
+
+      return parts.join('');
+    }
+
     fetch('help.txt')
       .then((response) => response.text())
       .then((text) => {
-        document.getElementById('helpContent').textContent = text;
+        document.getElementById('helpContent').innerHTML = renderHelpText(text);
       })
       .catch(() => {
         document.getElementById('helpContent').textContent = 'Le fichier help.txt est indisponible pour le moment.';

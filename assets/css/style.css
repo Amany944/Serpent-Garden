@@ -750,14 +750,281 @@ h1 {
   margin: 0 auto;
 }
 
+.help-visual {
+  margin: 24px 0 20px;
+  display: grid;
+  gap: 16px;
+}
+
+.help-visual__header {
+  display: grid;
+  gap: 8px;
+}
+
+.help-visual__intro {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.help-board-demo {
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid;
+  gap: 10px;
+}
+
+.help-board-demo__outside {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  color: #f5f7fa;
+  font-size: 0.92rem;
+  background: linear-gradient(180deg, rgba(108, 118, 133, 0.9), rgba(86, 95, 109, 0.95));
+}
+
+.help-board-demo__middle {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr) 112px;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.help-board-demo__outside--side {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  min-height: 250px;
+}
+
+.help-board-demo__playfield {
+  position: relative;
+  min-height: 250px;
+  border-radius: 20px;
+  border: 2px solid rgba(151, 255, 138, 0.26);
+  background:
+    radial-gradient(circle at top, rgba(145, 255, 156, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(6, 56, 24, 0.96), rgba(3, 30, 12, 0.98));
+  overflow: hidden;
+}
+
+.help-board-demo__label,
+.help-board-demo__snake-note,
+.help-board-demo__apple-note {
+  position: absolute;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: rgba(4, 18, 9, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f3fff5;
+}
+
+.help-board-demo__label--top {
+  top: 14px;
+  left: 14px;
+}
+
+.help-board-demo__snake {
+  position: absolute;
+  top: 118px;
+  left: 58px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help-board-demo__segment,
+.help-board-demo__head {
+  display: block;
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+}
+
+.help-board-demo__segment {
+  background: linear-gradient(180deg, #7cff82, #3daf54);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.help-board-demo__head {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #facc15, #fb923c);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.24);
+}
+
+.help-board-demo__head::before,
+.help-board-demo__head::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #112010;
+}
+
+.help-board-demo__head::before {
+  left: 9px;
+}
+
+.help-board-demo__head::after {
+  right: 9px;
+}
+
+.help-board-demo__snake-note {
+  top: 156px;
+  left: 62px;
+}
+
+.help-board-demo__apple {
+  position: absolute;
+  top: 102px;
+  right: 86px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c8ff76, #5cc946 68%, #2f7d24 100%);
+  box-shadow:
+    0 0 0 4px rgba(140, 255, 123, 0.12),
+    0 10px 16px rgba(0, 0, 0, 0.16);
+}
+
+.help-board-demo__apple::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 10px;
+  width: 3px;
+  height: 8px;
+  border-radius: 999px;
+  background: #4c2d14;
+}
+
+.help-board-demo__apple::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 12px;
+  width: 8px;
+  height: 6px;
+  border-radius: 8px 8px 2px 8px;
+  background: #79db63;
+  transform: rotate(-26deg);
+  transform-origin: left bottom;
+}
+
+.help-board-demo__apple-note {
+  top: 136px;
+  right: 30px;
+}
+
+.help-legend {
+  display: grid;
+  gap: 10px;
+  color: #d8e8dd;
+  font-size: 0.95rem;
+}
+
+.help-legend > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.help-legend__swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+.help-legend__swatch--safe {
+  background: linear-gradient(180deg, #7cff82, #3daf54);
+}
+
+.help-legend__swatch--danger {
+  background: linear-gradient(180deg, #8b95a3, #626b79);
+}
+
+.help-legend__swatch--apple {
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c8ff76, #5cc946 68%, #2f7d24 100%);
+}
+
 .help-content {
-  white-space: pre-wrap;
   line-height: 1.75;
   color: #d8e8dd;
   padding: 18px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.06);
+  display: grid;
+  gap: 14px;
+}
+
+.help-content p {
+  margin: 0;
+}
+
+.help-section {
+  display: block;
+  margin-top: 10px;
+}
+
+.help-section:first-child {
+  margin-top: 0;
+}
+
+.help-section__title {
+  margin: 8px 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.08rem;
+  color: #f3fff5;
+}
+
+.help-section__icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, rgba(151, 255, 138, 0.22), rgba(89, 219, 123, 0.16));
+  border: 1px solid rgba(151, 255, 138, 0.24);
+  color: #97ff8a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.help-list {
+  margin: -4px 0 2px 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+}
+
+.help-list li::marker {
+  color: var(--accent);
+}
+
+.help-ascii {
+  margin: 2px 0;
+  padding: 14px;
+  border-radius: 16px;
+  overflow-x: auto;
+  background: rgba(3, 16, 9, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #dffbe6;
+  font-family: "Cascadia Code", "Consolas", monospace;
+  line-height: 1.45;
 }
 
 .help-back {
@@ -924,5 +1191,62 @@ h1 {
 
   .game-layout {
     height: auto;
+  }
+
+  .help-board-demo__middle {
+    grid-template-columns: 1fr;
+  }
+
+  .help-board-demo__outside--side {
+    writing-mode: initial;
+    min-height: 44px;
+  }
+
+  .help-board-demo__playfield {
+    min-height: 220px;
+  }
+
+  .help-board-demo__snake {
+    left: 28px;
+    top: 112px;
+    gap: 6px;
+  }
+
+  .help-board-demo__segment {
+    width: 22px;
+    height: 22px;
+  }
+
+  .help-board-demo__head {
+    width: 28px;
+    height: 28px;
+  }
+
+  .help-board-demo__head::before,
+  .help-board-demo__head::after {
+    top: 8px;
+  }
+
+  .help-board-demo__head::before {
+    left: 7px;
+  }
+
+  .help-board-demo__head::after {
+    right: 7px;
+  }
+
+  .help-board-demo__snake-note {
+    top: 146px;
+    left: 26px;
+  }
+
+  .help-board-demo__apple {
+    right: 44px;
+    top: 90px;
+  }
+
+  .help-board-demo__apple-note {
+    right: 14px;
+    top: 126px;
   }
 }
