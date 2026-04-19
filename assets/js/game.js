@@ -272,9 +272,9 @@ function endGame(reason) {
 
   apiSaveScore(STATE.score)
     .then((payload) => {
-      const stats = payload.stats;
-      STATE.previousScore = stats.previous_score;
-      STATE.bestScore = stats.best_score;
+      const stats = payload.stats || {};
+      STATE.previousScore = stats.previous_score ?? STATE.previousScore;
+      STATE.bestScore = stats.best_score ?? STATE.bestScore;
       updateStatus();
       finalScore.textContent = STATE.score;
       finalPrevious.textContent = STATE.previousScore;
@@ -283,8 +283,8 @@ function endGame(reason) {
         ? `🏆 Le plus grand score de ce jeu est : ${STATE.bestScore} 😄`
         : 'Continue a tenter de battre le record.';
     })
-    .catch(() => {
-      bestMessage.textContent = 'Le score n a pas pu etre envoye au backend.';
+    .catch((error) => {
+      bestMessage.textContent = error?.message || 'Le score n a pas pu etre envoye au backend.';
       finalScore.textContent = STATE.score;
       finalPrevious.textContent = STATE.previousScore;
       finalBest.textContent = STATE.bestScore;
@@ -464,8 +464,9 @@ if (window.ResizeObserver && boardFrame) {
 
 apiStats()
   .then((payload) => {
-    STATE.previousScore = payload.stats.previous_score;
-    STATE.bestScore = payload.stats.best_score;
+    const stats = payload.stats || {};
+    STATE.previousScore = stats.previous_score ?? 0;
+    STATE.bestScore = stats.best_score ?? 0;
     updateStatus();
     resizeCanvas({ rerender: false });
     resetGame();

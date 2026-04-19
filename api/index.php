@@ -27,8 +27,19 @@ try {
 
     if ($method === 'POST') {
         $rawBody = file_get_contents('php://input');
-        $payload = json_decode($rawBody ?: '{}', true, 512, JSON_THROW_ON_ERROR);
-        $score = isset($payload['score']) ? (int) $payload['score'] : 0;
+        if ($rawBody !== '' && $rawBody !== null) {
+            try {
+                $payload = json_decode($rawBody, true, 512, JSON_THROW_ON_ERROR);
+            } catch (JsonException $exception) {
+                http_response_code(400);
+                echo json_encode(['error' => 'JSON invalide.'], JSON_UNESCAPED_UNICODE);
+                exit;
+            }
+        } else {
+            $payload = [];
+        }
+
+        $score = isset($payload['score']) && is_numeric($payload['score']) ? (int) $payload['score'] : 0;
 
         if ($score < 0) {
             $score = 0;

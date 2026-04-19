@@ -44,24 +44,24 @@ async function refreshStats(mode) {
 
   try {
     const payload = await apiStats();
-    const stats = payload.stats;
+    const stats = payload.stats || {};
     const valueByMode = {
-      previous: stats.previous_score,
-      latest: stats.last_score,
-      best: stats.best_score
+      previous: stats.previous_score ?? 0,
+      latest: stats.last_score ?? 0,
+      best: stats.best_score ?? 0
     };
 
     scoreValue.textContent = valueByMode[mode];
     scoreNote.textContent = mode === 'best'
       ? 'Le record est conserve en base de donnees et recupere a chaque visite.'
       : 'Le score est lu directement depuis la base de donnees SQLite.';
-    metaPrevious.textContent = stats.previous_score;
-    metaLatest.textContent = stats.last_score;
-    metaBest.textContent = stats.best_score;
+    metaPrevious.textContent = stats.previous_score ?? 0;
+    metaLatest.textContent = stats.last_score ?? 0;
+    metaBest.textContent = stats.best_score ?? 0;
     renderRecent(payload.recent_scores || []);
   } catch (error) {
     scoreValue.textContent = 'N/A';
-    scoreNote.textContent = 'Impossible de joindre le backend PHP pour le moment.';
+    scoreNote.textContent = error?.message || 'Impossible de joindre le backend PHP pour le moment.';
     recentScores.innerHTML = '<li>Le service de score est indisponible.</li>';
   }
 

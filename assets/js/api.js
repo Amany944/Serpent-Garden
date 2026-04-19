@@ -1,6 +1,13 @@
-const API_BASE = 'api/index.php';
+const API_BASE = 'api/score.php';
+
+function ensureLocalServer() {
+  if (window.location.protocol === 'file:') {
+    throw new Error('Ouvre le projet via un serveur local, par exemple http://localhost/serpent-garden/.');
+  }
+}
 
 async function apiGet(path) {
+  ensureLocalServer();
   const response = await fetch(path, {
     headers: { Accept: 'application/json' }
   });
@@ -21,6 +28,7 @@ async function apiSaveScore(score) {
 }
 
 async function apiPost(path, data) {
+  ensureLocalServer();
   const response = await fetch(path, {
     method: 'POST',
     headers: {

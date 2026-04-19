@@ -29,7 +29,7 @@ Tu dois utiliser un vrai serveur PHP. Ouvrir `game.html` en double-cliquant dans
 ## Verification du backend
 
 Le score est envoye a:
-- `api/index.php`
+- `api/score.php` puis relaye vers `api/index.php`
 
 La base SQLite est creee automatiquement ici:
 - `data/snake.sqlite`
